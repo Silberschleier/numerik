@@ -7,15 +7,13 @@ def LinearSolve(A, b):
 
 
 def PseudoInverse(A):
-    u, s, v = np.linalg.svd(A)
-    #u, s, v = SingularValueDecomposition(A)
+    #u, s, v = np.linalg.svd(A)
+    u, s, v = SingularValueDecomposition(A)
 
     # Kehrwerte fuer alle Elemente != 0
-    s = [1./x if x != 0 else 0 for x in s]
-    s = np.diag(s)
+    s = np.linalg.inv(s)
 
-    # V*S^+*U^T
-    return np.dot(v, s, u)
+    return v.dot(s.dot(u.T))
 
 
 def SingularValueDecomposition(A):
@@ -23,13 +21,15 @@ def SingularValueDecomposition(A):
     values, vectors = np.linalg.eig(A.T.dot(A))
 
     sigma = [np.sqrt(x) for x in values]
+    s = np.diag(sigma)
 
     u = []
-    for i, v in enumerate(vectors):
+    for i, v in enumerate(vectors.T):
         u.append(A.dot(v)/np.sqrt(values[i]))
     u = np.array(u)
+    u = u.T
 
-    return u, sigma, vectors
+    return u, s, vectors
 
 
 
@@ -45,4 +45,3 @@ if __name__ == "__main__":
 
     # Erwartetes Ergebnis: 1, -2 , -2
     print(LinearSolve(A, b))
-

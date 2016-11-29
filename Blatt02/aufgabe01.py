@@ -7,10 +7,7 @@ def LinearSolve(A, b):
 
 
 def PseudoInverse(A):
-    #u, s, v = np.linalg.svd(A)
     u, s, v = SingularValueDecomposition(A)
-
-    # Kehrwerte fuer alle Elemente != 0
     s = np.linalg.inv(s)
 
     return v.dot(s.dot(u.T))

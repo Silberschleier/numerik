@@ -11,16 +11,16 @@ def Householder(A):
 
     m, n = A.shape
     normal_list = []
-    e = np.eye(n)[:, 0]
 
     for k in range(0, n):
-        x = A[:, k]
-        vk = np.sign(x.item(0)) * la.norm(x, 2) * e.item(0) + x
-        vk /= la.norm(vk, 2)
+        x = A[k:, k]
 
+        x[0] += np.sign(x.item(0)) * la.norm(x, 2)
+        vk = np.zeros(m)
+        vk[k:m] = x
         normal_list.append(vk)
-        A[k:, k:] = A[k:, k:] - (2 * vk).dot(vk.dot(A[k:, k:]))
 
+        A[k:, k] = A[k:, k] - (2*vk)*(vk.T.dot(A))
     return normal_list, A
 
 

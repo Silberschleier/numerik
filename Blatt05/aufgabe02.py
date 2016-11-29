@@ -6,17 +6,30 @@ def LU(A):
     n, _ = A.shape
     L = np.eye(n, n)
 
-    for k in range(0, n-1):
-        for i in range(k+1, n):
+    for k in range(0, n - 1):
+        for i in range(k + 1, n):
             L[i][k] = U[i][k] / U[k][k]
-            U[i,k:] = U[i,k:] - L[i,k]*U[k,k:]
+            U[i, k:] = U[i, k:] - L[i, k] * U[k, k:]
 
     return U, L
 
 
+def BackSubstitution(U, y):
+    return np.linalg.solve(U, y)
+
+
+def ForwardSubstitution(L, b):
+    return np.linalg.solve(L, b)
+
+
+def SolveLinearSystemLU(A, b):
+    U, L = LU(A)
+    y = ForwardSubstitution(L, b)
+    return BackSubstitution(U, y)
+
 if __name__ == "__main__":
     # A = np.random.rand(3, 3)
-    A = np.array([ [7, 3, -1, 2], [3, 8, 1, -4], [-1, 1, 4, -1], [2, -4, -1, 6] ])
+    A = np.array([[7, 3, -1, 2], [3, 8, 1, -4], [-1, 1, 4, -1], [2, -4, -1, 6]])
     U, L = LU(A)
 
     print("A:")
@@ -30,3 +43,4 @@ if __name__ == "__main__":
 
     print("\nL*U:")
     print(L.dot(U))
+

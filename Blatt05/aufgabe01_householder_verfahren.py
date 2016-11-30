@@ -1,7 +1,6 @@
 import numpy as np
 from numpy import linalg as la
 
-# Funktion für vk * vk^t, da transpose und .T bei eindimensionalen Array nicht Funktioniert haben
 # Tipp mit vprod aus dem Internet: http://stackoverflow.com/questions/19238024/transpose-of-a-vector-using-numpy
 def vprod(x):
     y = np.atleast_2d(x)
@@ -13,17 +12,18 @@ def Householder(A):
           \return A pair (NormalList,R) where NormalList is a list of Householder
                   normal vectors and R is an upper triangular matrix shaped like A.
           \sa ComputeQ """
+    B = np.copy(A)
     normal_list = [];
-    m, n = A.shape
+    m, n = B.shape
     for k in range(0, n):
-        x = np.copy(A[k:, k]);
+        x = np.copy(B[k:, k]);
         vk = x;
         vk[0] = np.sign(x.item(0)) * la.norm(x, 2) + x.item(0);
         #print(vk)
         vk = vk/( la.norm(vk,2) );
         normal_list.append(vk)
-        A[k:, k:] = A[k:, k:] -2*vprod(vk).dot(A[k:, k:]);
-    return normal_list, A;
+        B[k:, k:] = B[k:, k:] - 2 * vprod(vk).dot(B[k:, k:]);
+    return normal_list, B;
 
 def ComputeQ(NormalList):
     """Given a normal list such as the one returned by householder() this
@@ -39,10 +39,12 @@ def ComputeQ(NormalList):
     return Q;
 
 if __name__ == "__main__":
-    A = np.random.rand(4, 3);
-    print("A: \n ",A,"\n")
+    A = np.random.rand(4, 3)
     NormalList, R = Householder(A)
-    print("R: \n", R, "\n")
     Q = ComputeQ(NormalList)
-    print("Q: \n", Q, "\n")
-    print(Q.dot(R))
+    print("The following matrix should be upper triangular:")
+    print(R)
+    print("If the solution consitutes a decomposition, the following is near zero:")
+    print(la.norm(A - np.dot(Q, R)))
+    print("If Q is unitary, the following is near zero:")
+    print(la.norm(np.dot(Q.T, Q) - np.eye(Q.shape[0])))

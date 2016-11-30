@@ -19,7 +19,7 @@ def Householder(A):
         x = np.copy(A[k:, k]);
         vk = x;
         vk[0] = np.sign(x.item(0)) * la.norm(x, 2) + x.item(0);
-        print(vk)
+        #print(vk)
         vk = vk/( la.norm(vk,2) );
         normal_list.append(vk)
         A[k:, k:] = A[k:, k:] -2*vprod(vk).dot(A[k:, k:]);
@@ -29,7 +29,6 @@ def ComputeQ(NormalList):
     """Given a normal list such as the one returned by householder() this
        function computes the corresponding orthogonal matrix."""
     Q = np.eye(NormalList[0].__len__()) - 2*vprod(NormalList[0])
-    print("Q: \n", Q, "\n")
     for k in range(1,NormalList.__len__()):
         H = np.eye(NormalList[k].__len__()) - 2 * vprod(NormalList[k])
         Q_m_minus_k = np.eye(NormalList[0].__len__())
@@ -45,4 +44,5 @@ if __name__ == "__main__":
     NormalList, R = Householder(A)
     print("R: \n", R, "\n")
     Q = ComputeQ(NormalList)
+    print("Q: \n", Q, "\n")
     print(Q.dot(R))

@@ -2,7 +2,6 @@ import numpy as np
 from numpy import linalg as la
 
 
-# Tipp mit vprod aus dem Internet: http://stackoverflow.com/questions/19238024/transpose-of-a-vector-using-numpy
 def vprod(x):
     y = np.atleast_2d(x)
     return np.dot(y.T, y)

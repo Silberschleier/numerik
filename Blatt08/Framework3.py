@@ -55,11 +55,14 @@ def GetModeOfVibration(ForceMatrix, iMode, KernelDimension):
     eigw, eigv = np.linalg.eig(ForceMatrix)
     eigi = np.argsort(eigw)[::-1]
 
-    AngularFrequencyList = [eigw[i] for i in eigi if eigw[i] != 0]
+    AngularFrequencyList = [np.sqrt(-eigw[i]) for i in eigi if eigw[i] != 0]
     AngularFrequency = AngularFrequencyList[iMode]
-    Offset = eigv[eigi[iMode]]
+
+    v = eigv[eigi[iMode]]
+    Offset = v / np.linalg.norm(v, ord=np.inf)
 
     return np.array(AngularFrequencyList), AngularFrequency, Offset
+
 
 def ApplyOffset(CurrentTime, Y, AngularFrequency, Offset, MaxExcursion):
     """This function returns the vector of y-coordinates for the given time

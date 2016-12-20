@@ -23,7 +23,6 @@ def GetForceMatrix(MassReciprocal, SpringConstant, SpringIndices):
     # Adjazenzmatrix erzeugen
     A = np.zeros((n, n))
     for i, j in SpringIndices:
-        print('i: {}, j: {}'.format(i, j))
         A[i][j] = 1
         A[j][i] = 1
 
@@ -53,6 +52,14 @@ def GetModeOfVibration(ForceMatrix, iMode, KernelDimension):
        mass coordinates. It is normalized such that the largest magnitude of 
        its entries is 1."""
 
+    eigw, eigv = np.linalg.eig(ForceMatrix)
+    eigi = np.argsort(eigw)[::-1]
+
+    AngularFrequencyList = [eigw[i] for i in eigi if eigw[i] != 0]
+    AngularFrequency = AngularFrequencyList[iMode]
+    Offset = eigv[eigi[iMode]]
+
+    return np.array(AngularFrequencyList), AngularFrequency, Offset
 
 def ApplyOffset(CurrentTime, Y, AngularFrequency, Offset, MaxExcursion):
     """This function returns the vector of y-coordinates for the given time
@@ -60,6 +67,8 @@ def ApplyOffset(CurrentTime, Y, AngularFrequency, Offset, MaxExcursion):
        Y corresponds to the vector of y-coordinates at time zero, CurrentTime 
        corresponds to t, AngularFrequency is sqrt(-lambda(i)), Offset is the 
        Eigenvector, MaxExcursion is L."""
+
+    return MaxExcursion * np.sin(AngularFrequency*CurrentTime)*Offset + Y
 
 
 def Update2DVibration(Frame, InitialTime, X, Y, SpringIndices, AngularFrequency, Offset, MaxExcursion, Points, Springs):

@@ -26,11 +26,13 @@ if __name__ == "__main__":
     # Aufgabe Teil c
     tree = spatial.KDTree(list(zip(positive_quarter_floats, [0]*length)))
     err = []
+    x = []
 
     for n in range(0, 10000):
-        x = 10 ** ((n - 5000) * 4.6 / 5000)
-        y = tree.query((x, 0))[0]
-        err.append((x, abs(y - x) / x))
+        xn = 10 ** ((n - 5000) * 4.6 / 5000)
+        yn = tree.query((xn, 0))[0]
+        x.append(xn)
+        err.append(abs(yn - xn) / xn)
 
-    pyplot.plot(err)
+    pyplot.plot(x, err)
     pyplot.show()

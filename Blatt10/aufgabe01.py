@@ -12,8 +12,8 @@ def GetQuarterFloat(sign, exponent, mantissa):
 
 if __name__ == "__main__":
     positive_quarter_floats = []
-    for e in range(0, 15):
-        positive_quarter_floats += [GetQuarterFloat(0, e, m) for m in range(0, 7)]
+    for e in range(0, 16):
+        positive_quarter_floats += [GetQuarterFloat(0, e, m) for m in range(0, 8)]
 
     # Aufgabe Teil b
     biggest = max(positive_quarter_floats)

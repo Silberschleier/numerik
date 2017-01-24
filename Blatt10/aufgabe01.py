@@ -1,4 +1,5 @@
 from matplotlib import pyplot
+from scipy import spatial
 
 
 def GetQuarterFloat(sign, exponent, mantissa):
@@ -14,10 +15,22 @@ if __name__ == "__main__":
     for e in range(0, 15):
         positive_quarter_floats += [GetQuarterFloat(0, e, m) for m in range(0, 7)]
 
+    # Aufgabe Teil b
     biggest = max(positive_quarter_floats)
     smallest = min([x for x in positive_quarter_floats if x != 0])
     length = len(positive_quarter_floats)
     print("Groesste Zahl: {}, Kleinste positive Zahl: {}, Anzahl moeglicher Zahlen: {}".format(biggest, smallest, length))
 
     pyplot.scatter(positive_quarter_floats, [0]*length)
+
+    # Aufgabe Teil c
+    tree = spatial.KDTree(list(zip(positive_quarter_floats, [0]*length)))
+    err = []
+
+    for n in range(0, 10000):
+        x = 10 ** ((n - 5000) * 4.6 / 5000)
+        y = tree.query((x, 0))[0]
+        err.append((x, abs(y - x) / x))
+
+    pyplot.plot(err)
     pyplot.show()

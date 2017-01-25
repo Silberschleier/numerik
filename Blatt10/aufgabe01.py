@@ -32,7 +32,16 @@ if __name__ == "__main__":
         xn = 10 ** ((n - 5000) * 4.6 / 5000)
         yn = tree.query((xn, 0))[0]
         x.append(xn)
-        err.append(abs(yn - xn) / xn)
+        err.append(1 - abs(yn - xn) / xn)
 
     pyplot.plot(x, err)
     pyplot.show()
+
+    '''
+    Erklaerung Teil d:
+    Der Plot stellt die in Teil c berechneten Fehler und alle positiven Quarterfloats dar.
+    Fuer die x, die sich exakt durch einen QuarterFloat darstellen lassen, gibt es keinen Fehler.
+    "Auf halbem Weg" zwischen zwei QuarterFloats erreichen die Fehler logischerweise ein lokales Maximum.
+    Im Plot erkennbar ist, dass dieses Maximum mit steigender Mantisse kleiner wird und unabhängig vom Exponenten ist.
+
+    '''
